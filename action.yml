@@ -1,0 +1,13 @@
+name: 'Omni Repo - Tag'
+description: 'Github Action for creating git tags'
+author: 'aabenoja'
+inputs:
+  github_token:
+    required: true
+    description: 'Needed to generate and push release tags'
+  version_map:
+    required: true
+    description: 'A JSON map of projects to update and their expected version'
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
