@@ -9,7 +9,6 @@ This action generates git tags. It is only run for main branch builds; feature b
   with:
     github_token: ${{ secrets.GITHUB_TOKEN }}
     version_map: ${{ steps.versioning.outputs.version_map }}
-    "Notifications.Bff": "Participant Guidance Notifications Micro-Frontend"
 ```
 
 ## Inputs

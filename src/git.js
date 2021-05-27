@@ -2,7 +2,9 @@ const core = require('@actions/core');
 const github = require('@actions/github');
 const isMain = require('../util/_isMainBranch');
 
-const octokit = github.getOctokit(core.getInput('GITHUB_TOKEN', { required: true }));
+const octokit = github.getOctokit(
+  core.getInput('GITHUB_TOKEN', { required: true })
+);
 
 const tagProjects = async versionMap => {
   core.startGroup('Generate Version Tags');
@@ -13,7 +15,7 @@ const tagProjects = async versionMap => {
       await octokit.git.createRef({
         ...github.context.repo,
         ref: `refs/tags/${tag}`,
-        sha: github.context.sha,
+        sha: github.context.sha
       });
     }
   } else {
