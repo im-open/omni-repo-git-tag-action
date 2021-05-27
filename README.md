@@ -2,39 +2,45 @@
 
 This action generates git tags. It is only run for main branch builds; feature branches are skipped.
 
+## Example
+
 ```yml
-- name: Create tags
-  uses: ./path/to/action
-  if: ${{ !env.ACT }}
-  with:
-    github_token: ${{ secrets.GITHUB_TOKEN }}
-    version_map: ${{ steps.versioning.outputs.version_map }}
+name: Create Git Tag
+on: workflow_dispatch
+jobs:
+  map-some-version:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Map versions
+        id: map-versions
+        uses: im-open/omni-repo-version-map-action@v1
+      - name: Tag Project Versions
+        uses: im-open/omni-repo-git-tag-action@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          version_map: ${{ steps.map-versions.outputs.version_map }}
 ```
 
 ## Inputs
 
-```yml
-inputs:
-  github_token:
-    required: true
-    description: 'Needed to generate and push release tags'
-  version_map:
-    required: true
-    description: 'A JSON map of projects to update and their expected version'
-```
+| Parameter                   | Is Required                |Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| --------------------------- | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `github_token`                 | Yes     | Needed to generate and push release tags                                                                                           |
+| `version_map`               | Yes    |  A JSON object that maps projects to the tag to give them                                             |  
 
-`version_map` follows the given schema:
+The `version_map` needs to have the following schema:
 
 ```json
 {
   "Project Name": {
-    "tag": "expected git tag",
-    "version": "expected semver version"
+    "tag": "The git tag you want to create"
   }
 }
 ```
 
-This should be generated in a previous step such as with this [versioning action](https://github.com/im-open/omni-repo-version-map-action).
+This is most easily generated in a previous step, such as with this [versioning action](https://github.com/im-open/omni-repo-version-map-action).
 
 ## Recompiling
 

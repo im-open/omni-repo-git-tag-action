@@ -7,7 +7,7 @@ inputs:
     description: 'Needed to generate and push release tags'
   version_map:
     required: true
-    description: 'A JSON map of projects to update and their expected version'
+    description: 'A JSON object that maps projects to the tag to give them'
 runs:
   using: 'node12'
   main: 'dist/index.js'
