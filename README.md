@@ -1,6 +1,6 @@
 # Release Action
 
-This action generates git tags. It is only run for main branch builds; feature branches are skipped.
+This action pushes supplied tag values to the remote repository. It is only run for main/master branch builds; feature branches are skipped.
 
 ## Example
 

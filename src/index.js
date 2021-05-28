@@ -1,4 +1,5 @@
 const core = require('@actions/core');
+const isMain = require('../util/_isMainBranch');
 const { tagProjects } = require('./git');
 
 const getVersionMap = () => {
@@ -7,9 +8,13 @@ const getVersionMap = () => {
 };
 
 const run = async () => {
-  const versionMap = getVersionMap();
+  if (await isMain()) {
+    const versionMap = getVersionMap();
 
-  await tagProjects(versionMap);
+    await tagProjects(versionMap);
+  } else {
+    core.info('No tags will be generated for branches');
+  }
 };
 
 run();

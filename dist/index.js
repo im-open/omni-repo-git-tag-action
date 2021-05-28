@@ -314,6 +314,29 @@ var require_core = __commonJS({
   }
 });
 
+// util/_exec.js
+var require_exec = __commonJS({
+  'util/_exec.js'(exports2, module2) {
+    var util = require('util');
+    module2.exports = util.promisify(require('child_process').exec);
+  }
+});
+
+// util/_isMainBranch.js
+var require_isMainBranch = __commonJS({
+  'util/_isMainBranch.js'(exports2, module2) {
+    var exec = require_exec();
+    var isMain2 = async () => {
+      let { stdout: branchName } = await exec(
+        'git rev-parse --abbrev-ref HEAD'
+      );
+      branchName = branchName.trim();
+      return branchName === 'main' || branchName === 'master';
+    };
+    module2.exports = isMain2;
+  }
+});
+
 // node_modules/@actions/github/lib/context.js
 var require_context = __commonJS({
   'node_modules/@actions/github/lib/context.js'(exports2) {
@@ -5910,52 +5933,24 @@ var require_github = __commonJS({
   }
 });
 
-// util/_exec.js
-var require_exec = __commonJS({
-  'util/_exec.js'(exports2, module2) {
-    var util = require('util');
-    module2.exports = util.promisify(require('child_process').exec);
-  }
-});
-
-// util/_isMainBranch.js
-var require_isMainBranch = __commonJS({
-  'util/_isMainBranch.js'(exports2, module2) {
-    var exec = require_exec();
-    var isMain = async () => {
-      let { stdout: branchName } = await exec(
-        'git rev-parse --abbrev-ref HEAD'
-      );
-      branchName = branchName.trim();
-      return branchName === 'main' || branchName === 'master';
-    };
-    module2.exports = isMain;
-  }
-});
-
 // src/git.js
 var require_git = __commonJS({
   'src/git.js'(exports2, module2) {
     var core2 = require_core();
     var github = require_github();
-    var isMain = require_isMainBranch();
     var octokit = github.getOctokit(
       core2.getInput('GITHUB_TOKEN', { required: true })
     );
     var tagProjects2 = async versionMap => {
-      core2.startGroup('Generate Version Tags');
-      if (await isMain()) {
-        for (const project of Object.keys(versionMap)) {
-          const { tag } = versionMap[project];
-          core2.info(`Tagging ${project} with ${tag}`);
-          await octokit.git.createRef({
-            ...github.context.repo,
-            ref: `refs/tags/${tag}`,
-            sha: github.context.sha
-          });
-        }
-      } else {
-        core2.info('No tags will be generated for branches');
+      core2.startGroup('Pushing Version Tags');
+      for (const project of Object.keys(versionMap)) {
+        const { tag } = versionMap[project];
+        core2.info(`Tagging ${project} with ${tag}`);
+        await octokit.git.createRef({
+          ...github.context.repo,
+          ref: `refs/tags/${tag}`,
+          sha: github.context.sha
+        });
       }
       core2.endGroup();
     };
@@ -5965,14 +5960,19 @@ var require_git = __commonJS({
 
 // src/index.js
 var core = require_core();
+var isMain = require_isMainBranch();
 var { tagProjects } = require_git();
 var getVersionMap = () => {
   const data = core.getInput('version_map', { required: true });
   return JSON.parse(data);
 };
 var run = async () => {
-  const versionMap = getVersionMap();
-  await tagProjects(versionMap);
+  if (await isMain()) {
+    const versionMap = getVersionMap();
+    await tagProjects(versionMap);
+  } else {
+    core.info('No tags will be generated for branches');
+  }
 };
 run();
 /*!
