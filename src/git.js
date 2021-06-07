@@ -1,9 +1,7 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
 
-const octokit = github.getOctokit(
-  core.getInput('GITHUB_TOKEN', { required: true })
-);
+const octokit = github.getOctokit(core.getInput('GITHUB_TOKEN', { required: true }));
 
 const tagProjects = async versionMap => {
   core.startGroup('Pushing Version Tags');
