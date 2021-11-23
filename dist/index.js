@@ -5372,7 +5372,7 @@ var require_git = __commonJS({
   }
 });
 
-// src/index.js
+// src/main.js
 var core = require_core();
 var isMain = require_isMainBranch();
 var { tagProjects } = require_git();
