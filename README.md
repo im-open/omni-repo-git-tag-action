@@ -25,7 +25,7 @@ jobs:
         uses: actions/checkout@v2
       - name: Map versions
         id: map-versions
-        uses: im-open/omni-repo-version-map-action@v1.0.2
+        uses: im-open/omni-repo-version-map-action@v1.0.4
       - name: Tag Project Versions
         uses: im-open/omni-repo-git-tag-action@v1.0.2
         with:
