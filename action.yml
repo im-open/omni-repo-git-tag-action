@@ -9,5 +9,5 @@ inputs:
     required: true
     description: 'A JSON object that maps projects to the tag to give them'
 runs:
-  using: 'node12'
+  using: 'node16'
   main: 'dist/index.js'
