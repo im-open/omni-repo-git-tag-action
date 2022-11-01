@@ -9,11 +9,14 @@ const tagProjects = async versionMap => {
     const { tag } = versionMap[project];
 
     core.info(`Tagging ${project} with ${tag}`);
-    await octokit.git.createRef({
-      ...github.context.repo,
-      ref: `refs/tags/${tag}`,
-      sha: github.context.sha
-    });
+    await octokit.rest.git
+      .createRef({
+        ...github.context.repo,
+        ref: `refs/tags/${tag}`,
+        sha: github.context.sha
+      })
+      .then(() => {})
+      .catch(() => {});
   }
   core.endGroup();
 };
