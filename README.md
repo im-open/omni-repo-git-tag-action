@@ -27,7 +27,7 @@ jobs:
         id: map-versions
         uses: im-open/omni-repo-version-map-action@v1.1.1
       - name: Tag Project Versions
-        uses: im-open/omni-repo-git-tag-action@v1.1.1
+        uses: im-open/omni-repo-git-tag-action@v1.1.2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           version_map: ${{ steps.map-versions.outputs.version_map }}
