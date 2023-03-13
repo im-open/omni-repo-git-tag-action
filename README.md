@@ -1,13 +1,13 @@
 # Release Action
 
 This action pushes supplied tag values to the remote repository. It is only run for main/master branch builds; feature branches are skipped.
-    
-## Index 
+
+## Index
 
 - [Example](#example)
 - [Inputs](#inputs)
 - [Contributing](#contributing)
-  - [Recompiling](#recompiling)
+  - [Recompiling](#recompiling-manually)
   - [Incrementing the Version](#incrementing-the-version)
 - [Code of Conduct](#code-of-conduct)
 - [License](#license)
@@ -23,11 +23,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      
       - name: Map versions
         id: map-versions
-        uses: im-open/omni-repo-version-map-action@v1.1.1
+        uses: im-open/omni-repo-version-map-action@v1
+      
       - name: Tag Project Versions
-        uses: im-open/omni-repo-git-tag-action@v1.1.2
+        # You may also reference the major or major.minor version
+        uses: im-open/omni-repo-git-tag-action@v1.1.3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           version_map: ${{ steps.map-versions.outputs.version_map }}
