@@ -1,3 +1,7 @@
+# DEPRECATED
+
+This action was deprecated on 2023-09-08 and will no longer receive support or updates.
+
 # Release Action
 
 This action pushes supplied tag values to the remote repository. It is only run for main/master branch builds; feature branches are skipped.
